@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Inbox | PharmaCare</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div class="container">
+    <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h1>Inbox</h1>
+            <a th:href="@{/messages/send}" class="btn">+ Send Message</a>
+        </div>
+        <table>
+            <thead><tr><th>From</th><th>Subject</th><th>Message</th><th>Sent At</th></tr></thead>
+            <tbody>
+            <tr th:each="m : ${messages}">
+                <td th:text="${m.sender}">Sender</td>
+                <td th:text="${m.subject}">Subject</td>
+                <td th:text="${m.body}">Body</td>
+                <td th:text="${m.sentAt}">Date</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div th:replace="~{fragments/chatbot :: chatbot}"></div>
+</body>
+</html>

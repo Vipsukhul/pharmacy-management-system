@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout | PharmaCare</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div class="container">
+    <div class="card">
+        <h1>Record Sale (Checkout)</h1>
+        <form th:action="@{/sales/checkout}" method="post">
+            <div class="form-group">
+                <label>Customer Name</label>
+                <input type="text" name="customerName" required>
+            </div>
+            <div class="form-group">
+                <label>Customer Phone</label>
+                <input type="text" name="customerPhone">
+            </div>
+
+            <h3>Select Medicines</h3>
+            <table>
+                <thead><tr><th>Medicine</th><th>Price</th><th>In Stock</th><th>Quantity</th></tr></thead>
+                <tbody>
+                <tr th:each="m : ${medicines}">
+                    <td>
+                        <label style="font-weight:normal;">
+                            <input type="checkbox" onchange="toggleRow(this)"> <span th:text="${m.name}">Med</span>
+                        </label>
+                        <input type="hidden" th:value="${m.id}" class="med-id" disabled>
+                    </td>
+                    <td th:text="'₹' + ${m.price}">0</td>
+                    <td th:text="${m.quantity}">0</td>
+                    <td><input type="number" min="1" th:max="${m.quantity}" class="qty-input" name="quantity" disabled></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <button type="submit" class="btn" style="margin-top:16px;">Complete Sale &amp; Generate Invoice</button>
+        </form>
+    </div>
+</div>
+
+<script>
+function toggleRow(checkbox) {
+    const row = checkbox.closest('tr');
+    const qty = row.querySelector('.qty-input');
+    const medIdInput = row.querySelector('.med-id');
+    qty.disabled = !checkbox.checked;
+    medIdInput.disabled = !checkbox.checked;
+    medIdInput.name = checkbox.checked ? 'medicineId' : '';
+}
+</script>
+</body>
+</html>
