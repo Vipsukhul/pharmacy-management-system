@@ -1,0 +1,46 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: pharmacy-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-Vipul0310}
+      MYSQL_DATABASE: pharmacy_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD:-Vipul0310}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - pharmacy-network
+
+  app:
+    build: .
+    container_name: pharmacy-app
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/pharmacy_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      DB_USERNAME: root
+      DB_PASSWORD: ${DB_PASSWORD:-Vipul0310}
+      SERVER_PORT: 8080
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin@123}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@gmail.com}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - pharmacy-network
+
+volumes:
+  mysql_data:
+
+networks:
+  pharmacy-network:
+    driver: bridge

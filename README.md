@@ -2,7 +2,8 @@
 
 **Stack:** Java 21 + Spring Boot 3.3.2 + Spring Security + Spring Data JPA + Thymeleaf + MySQL
 
-**Live Demo:** https://pharmacy-management-system-production-a6a5.up.railway.app/login
+**Live Demo:** Railway.app
+
 
 ## Features
 
@@ -44,9 +45,15 @@ ADMIN_PASSWORD=your_admin_password
 ADMIN_EMAIL=admin@gmail.com
 ```
 
-### 2. Build & Run
-Using the included Maven Wrapper:
+### 2. Run the Application
 
+#### Option A: Using Docker Compose (Starts App + MySQL automatically)
+```bash
+docker compose up --build
+```
+This starts both the MySQL 8 database and the Java 21 Spring Boot app in connected containers.
+
+#### Option B: Using Maven Wrapper (Local Java & MySQL)
 - **Windows:**
   ```cmd
   mvnw.cmd spring-boot:run
